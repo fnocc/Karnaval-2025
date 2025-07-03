@@ -62,6 +62,7 @@
 
     h3 {
       color: black;
+      margin-right: 120px;
     }
 
     span {
@@ -85,6 +86,7 @@
     table th {
       padding-left: 4px;
       background-color: #60bbf7;
+      color: white;
       text-align: left;
     }
 
@@ -156,7 +158,19 @@
       background-color: #04AA6D;
       color: white;
     }
-
+    input{
+      margin: 10px 0px;
+      max-width: 100px;
+    }
+    .label{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+    .fa-sort{
+      float: right;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -207,14 +221,17 @@
 
   <!-- DATA: Pemuda -->
   <div class="DATA content">
-    <h3>Data Pemuda</h3>
+    <div class="label">
+      <h3>Data Pemuda</h3>
+      <input type="text" id="searchPemuda" placeholder="Cari" />
+    </div>
     <table id="data-table">
       <thead>
         <tr>
           <th>No.</th>
-          <th>Nama</th>
-          <th>Status</th>
-        </tr>
+          <th id="thNama">Nama <i class="fas fa-sort"></i></th>
+         <th id="thStatus">Status <i class="fas fa-sort"></i></th>
+        </tr> 
       </thead>
       <tbody></tbody>
     </table>
@@ -222,12 +239,16 @@
 
   <!-- DATA: KK -->
   <div class="DATA content">
-    <h3>Data KK</h3>
+    <div class="label">
+      <h3>Data KK</h3>
+      <input type="text" id="searchKK" placeholder="Cari" />
+    </div>
+    
      <table id="kk-table">
     <thead>
       <tr>
         <th>No.</th>
-        <th>Nama</th>
+        <th>Nama<i class="fas fa-sort"></th>
       </tr>
     </thead>
     <tbody></tbody>
@@ -276,38 +297,80 @@
 
     setActive(myBtna); 
 
-    // Load data_pemuda.json
-    fetch('data_pemuda.json')
-      .then(response => response.json())
-      .then(data => {
-        const tbody = document.querySelector('#data-table tbody');
-        tbody.innerHTML = '';
-
-        data.forEach((item, index) => {
-  const tr = document.createElement('tr');
-
-  if (item.Status.toLowerCase() === "bekerja") {
-    tr.style.backgroundColor = "#fff2cc";
-  }
-
-  tr.innerHTML = `
-    <td>${index + 1}</td>
-    <td>${item.Nama}</td>
-    <td>${item.Status}</td>
-  `;
-  tbody.appendChild(tr);
-});
-      })
-      .catch(error => console.error('Gagal ambil data:', error));
+    let pemudaData = [];
+    let pemudaSortDirection = true;
+    let pemudaSortByStatusAsc = true;
 
 
-  //load data kk
-  fetch('data_kk.json')
-  .then(response => response.json())
-  .then(data => {
-    const tbody = document.querySelector('#kk-table tbody');
+  function renderPemudaTable(data) {
+    const tbody = document.querySelector('#data-table tbody');
     tbody.innerHTML = '';
 
+    data.forEach((item, index) => {
+      const tr = document.createElement('tr');
+      if (item.Status.toLowerCase() === "bekerja") {
+        tr.style.backgroundColor = "#fff2cc";
+      }
+
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item.Nama}</td>
+        <td>${item.Status}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  fetch('data_pemuda.json')
+    .then(response => response.json())
+    .then(data => {
+      pemudaData = data;
+      renderPemudaTable(pemudaData);
+    });
+
+  document.getElementById('searchPemuda').addEventListener('input', function () {
+    const keyword = this.value.toLowerCase();
+    const filtered = pemudaData.filter(item =>
+      item.Nama.toLowerCase().includes(keyword) ||
+      item.Status.toLowerCase().includes(keyword)
+    );
+    renderPemudaTable(filtered);
+  });
+
+  // Sorting Pemuda (klik kolom Nama)
+  document.querySelector('#data-table th:nth-child(2)').style.cursor = 'pointer';
+  document.querySelector('#data-table th:nth-child(2)').addEventListener('click', () => {
+    pemudaSortDirection = !pemudaSortDirection;
+    const sorted = [...pemudaData].sort((a, b) => {
+      return pemudaSortDirection
+        ? a.Nama.localeCompare(b.Nama)
+        : b.Nama.localeCompare(a.Nama);
+    });
+    renderPemudaTable(sorted);
+  });
+
+  // Sorting Pemuda kolom Status
+document.querySelector('#data-table th:nth-child(3)').style.cursor = 'pointer';
+document.querySelector('#data-table th:nth-child(3)').addEventListener('click', () => {
+  pemudaSortByStatusAsc = !pemudaSortByStatusAsc;
+  const sorted = [...pemudaData].sort((a, b) => {
+    return pemudaSortByStatusAsc
+      ? a.Status.localeCompare(b.Status)
+      : b.Status.localeCompare(a.Status);
+  });
+  renderPemudaTable(sorted);
+});
+
+
+  // ===============================
+  // Pencarian dan Sorting KK
+  // ===============================
+  let kkData = [];
+  let kkSortDirection = true;
+
+  function renderKKTable(data) {
+    const tbody = document.querySelector('#kk-table tbody');
+    tbody.innerHTML = '';
     data.forEach((item, index) => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -316,8 +379,34 @@
       `;
       tbody.appendChild(tr);
     });
-  })
-  .catch(error => console.error('Gagal ambil data KK:', error));
+  }
+
+  fetch('data_kk.json')
+    .then(response => response.json())
+    .then(data => {
+      kkData = data;
+      renderKKTable(kkData);
+    });
+
+  document.getElementById('searchKK').addEventListener('input', function () {
+    const keyword = this.value.toLowerCase();
+    const filtered = kkData.filter(item =>
+      item.Nama.toLowerCase().includes(keyword)
+    );
+    renderKKTable(filtered);
+  });
+
+  // Sorting KK (klik kolom Nama)
+  document.querySelector('#kk-table th:nth-child(2)').style.cursor = 'pointer';
+  document.querySelector('#kk-table th:nth-child(2)').addEventListener('click', () => {
+    kkSortDirection = !kkSortDirection;
+    const sorted = [...kkData].sort((a, b) => {
+      return kkSortDirection
+        ? a.Nama.localeCompare(b.Nama)
+        : b.Nama.localeCompare(a.Nama);
+    });
+    renderKKTable(sorted);
+  });
   </script>
 
 </body>
