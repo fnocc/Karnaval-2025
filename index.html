@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Karnaval 2025</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     * {
       font-size: 1rem;
-      font-family: monospace;
+      font-family: Arial, sans-serif;
       box-sizing: border-box;
       line-height: 1.6;
       letter-spacing: 0.4px;
@@ -83,14 +85,26 @@
     table th {
       padding-left: 4px;
       background-color: #60bbf7;
-      border: 1px solid grey;
       text-align: left;
     }
 
     table td {
-      border: 1px solid grey;
       vertical-align: top;
       padding: 4px;
+    }
+    #data-table{
+      border: 1px solid grey;
+    }
+    #data-table td{
+      border-bottom: 1px solid grey;
+      border-right: 1px solid grey;
+    }
+    #kk-table{
+      border: 1px solid grey;
+    }
+    #kk-table td{
+      border-bottom: 1px solid grey;
+      border-right: 1px solid grey;
     }
     #data-table td:first-child,
     #data-table th:first-child {
@@ -121,6 +135,28 @@
       display: block;
       opacity: 1;
     }
+    .INFO.content table{
+      border: none;
+    }
+    .fas{
+      font-size: 16px;
+    }
+    .fa-map-marker-alt{
+      color: white;
+    }
+    .maps{
+      margin: 20px 0px;
+
+    }
+    .maps a{
+      border: 1px solid green;
+      padding: 10px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      background-color: #04AA6D;
+      color: white;
+    }
+
   </style>
 </head>
 <body>
@@ -128,6 +164,20 @@
   <div class="nav">
     <button id="myBtna">INFO</button>
     <button id="myBtnb">PESERTA & KK</button>
+</div>
+  </div>
+
+   <div class="INFO content">
+    <i class="update">update</i>
+    <h3><q>⏰ Pertemuan 2: 20 Juli 2025</q></h3>
+    <table>
+      <tr><td>Lokasi</td><td>: Rumah Sime/Feri</td></tr>
+      <tr><td>Jam</td><td>: 19:00 WIB</td></tr>
+    </table>
+    <div class="maps">
+      <a href="https://maps.app.goo.gl/YRfdU45ZZ8E8Luv99"><i class="fas fa-map-marker-alt"></i>Lokasi</a>
+    </div>
+    
   </div>
 
   <!-- INFO Section -->
@@ -153,15 +203,6 @@
       </ul>
     </blockquote>
     <p>⚠️ Info ini khusus untuk RT 02.</p>
-  </div>
-
-  <div class="INFO content">
-    <i class="update">update</i>
-    <h3><q>⏰ Pertemuan 2: 20 Juli 2025</q></h3>
-    <table>
-      <tr><td>Lokasi</td><td>: Rumah Sime/Feri</td></tr>
-      <tr><td>Jam</td><td>: 19:00 WIB</td></tr>
-    </table>
   </div>
 
   <!-- DATA: Pemuda -->
